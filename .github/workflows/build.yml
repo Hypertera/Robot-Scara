@@ -1,4 +1,4 @@
-name: Build Simulador SCARA
+name: Build Simulador SCARA v2
 
 on:
   workflow_dispatch:
