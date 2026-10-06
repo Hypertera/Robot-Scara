@@ -99,7 +99,6 @@ jobs:
           name: ${{ matrix.artifact_name }}
           path: ${{ matrix.archive_name }}
 
-
   release:
     name: Create GitHub Release
     needs: build
