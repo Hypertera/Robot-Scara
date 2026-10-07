@@ -139,9 +139,8 @@ def evaluar_splines_c(S, t, time):
 
     # Identificar el índice del tramo
     if time > t[-1]:
-        k = n - 2  # Python usa índices desde 0, el último tramo es n-2
+        k = n - 2
     else:
-        # Busca el primer índice donde el tiempo encaja en el intervalo [t_k, t_{k+1}]
         # t[1:] es t_{k+1} y t[:-1] es t_k
         indices = np.where((t[:-1] <= time) & (time <= t[1:]))[0]
         k = indices[0] if indices.size > 0 else 0
