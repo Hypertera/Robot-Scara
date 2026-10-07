@@ -80,19 +80,21 @@ class InterfazScara(QMainWindow):
         super().__init__()
         
         if sys.platform == "darwin":
+            self.nombre_icono = "icon.icns"
             self.atajo_guardar = "Meta+G"
             self.atajo_abrir = "Meta+O"
             self.atajo_limpiar = "Meta+X"
             self.atajo_deshacer = "Meta+Z"
             self.atajo_pantalla = "Meta+Ctrl+F"
         else:
+            self.nombre_icono = "icon.ico"
             self.atajo_guardar = "Ctrl+G"
             self.atajo_abrir = "Ctrl+O"
             self.atajo_limpiar = "Ctrl+X"
             self.atajo_deshacer = "Ctrl+Z"
             self.atajo_pantalla = "F11"
         
-        self.setWindowIcon(QIcon(resolver_ruta("icon.ico")))
+        self.setWindowIcon(QIcon(resolver_ruta(self.nombre_icono)))
 
         self.atajo_pantalla = QShortcut(QKeySequence(self.atajo_pantalla), self)
         self.atajo_pantalla.activated.connect(self.alternar_pantalla_completa)
