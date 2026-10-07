@@ -10,10 +10,10 @@ from PyInstaller.utils.hooks import collect_all
 # ============================================================
 
 datas = [
-    ("icon.ico", "."),
-    ("icon.icns", "."),
-    ("switch.png", "."),
-    ("switch2.png", "."),
+    ("SimuladorSCARA/icon.ico", "."),
+    ("SimuladorSCARA/icon.icns", "."),
+    ("SimuladorSCARA/switch.png", "."),
+    ("SimuladorSCARA/switch2.png", "."),
 ]
 
 
@@ -31,9 +31,9 @@ datas += pg_datas
 # ============================================================
 
 if sys.platform == "darwin":
-    icono_ejecutable = "icon.icns"
+    icono_ejecutable = "SimuladorSCARA/icon.icns"
 else:
-    icono_ejecutable = "icon.ico"
+    icono_ejecutable = "SimuladorSCARA/icon.ico"
 
 
 # ============================================================
@@ -41,7 +41,7 @@ else:
 # ============================================================
 
 a = Analysis(
-    ["InterfazSimulacion.py"],
+    ["SimuladorSCARA/InterfazSimulacion.py"],
     pathex=[],
     binaries=pg_binaries,
     datas=datas,
@@ -103,6 +103,6 @@ if sys.platform == "darwin":
     app = BUNDLE(
         coll,
         name="Simulador_SCARA_by_Hypertera.app",
-        icon="icon.icns",
+        icon="SimuladorSCARA/icon.icns",
         bundle_identifier="com.hypertera.simuladorscara",
     )
