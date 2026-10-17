@@ -19,7 +19,6 @@ from PySide6.QtWidgets import (QApplication, QMainWindow,
                                )
 
 def resolver_ruta(ruta_relativa):
-    """ Obtiene la ruta absoluta para recursos empaquetados por PyInstaller """
     if hasattr(sys, '_MEIPASS'):
         return os.path.join(sys._MEIPASS, ruta_relativa)
     return os.path.join(os.path.abspath("."), ruta_relativa)
