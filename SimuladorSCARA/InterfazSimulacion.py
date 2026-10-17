@@ -210,8 +210,8 @@ class InterfazScara(QMainWindow):
                     color: #ffffff;
                 }
                 QLineEdit::placeholder {
-                    color: #888888; /* Gris tenue para diferenciarlo del texto real */
-                    font-style: italic; /* Opcional: cursiva para la sugerencia */
+                    color: #888888;
+                    font-style: italic;
                 }
             """)
             
@@ -414,7 +414,7 @@ class InterfazScara(QMainWindow):
                 height: 20px;
             }
             QProgressBar::chunk {
-                background-color: #3498db; /* Color azul igual que tus pestañas */
+                background-color: #3498db;
                 border-radius: 4px;
             }
         """)
@@ -587,13 +587,11 @@ class InterfazScara(QMainWindow):
                                 height: 20px; 
                                 border-radius: 10px;
                             }}
-                            /* Estado Desactivado: Carga switch2.png */
                             QCheckBox::indicator:unchecked {{ 
                                 background-color: #232627; 
                                 image: url('{ruta_switch_off}'); 
                                 alignment: left;
                             }}
-                            /* Estado Activado: Carga switch1.png */
                             QCheckBox::indicator:checked {{ 
                                 background-color: #232627; 
                                 image: url('{ruta_switch_on}'); 
