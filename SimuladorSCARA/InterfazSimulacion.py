@@ -19,9 +19,12 @@ from PySide6.QtWidgets import (QApplication, QMainWindow,
                                )
 
 def resolver_ruta(ruta_relativa):
-    if hasattr(sys, '_MEIPASS'):
-        return os.path.join(sys._MEIPASS, ruta_relativa)
-    return os.path.join(os.path.abspath("."), ruta_relativa)
+    if hasattr(sys, "_MEIPASS"):
+        base_path = sys._MEIPASS
+    else:
+        base_path = os.path.dirname(os.path.abspath(__file__))
+
+    return os.path.join(base_path, ruta_relativa)
 
 class Variables():
     puntos_x = []
