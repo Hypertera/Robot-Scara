@@ -14,6 +14,9 @@ datas = [
     ("SimuladorSCARA/icon.icns", "."),
     ("SimuladorSCARA/switch.png", "."),
     ("SimuladorSCARA/switch2.png", "."),
+    ("Fuentes/JetBrainsMono-Regular.ttf", "Fuentes"),
+    ("Fuentes/JetBrainsMono-Bold.ttf", "Fuentes"),
+    ("Fuentes/BrunoAce-Regular.ttf", "Fuentes"),
 ]
 
 
