@@ -3,8 +3,12 @@ import sys
 import numpy as np
 import time
 from PySide6.QtCore import Qt, QTimer
-from PySide6.QtGui import QFont, QShortcut, QKeySequence, QIcon
 import pyqtgraph.opengl as gl
+
+from PySide6.QtGui import (QFontDatabase, QFont, 
+                           QShortcut, QKeySequence, 
+                           QIcon)
+
 from RobotSCARA import (Jacobiano, cinematicaInversa, 
                         obtener_splines, evaluar_splines_c,
                         normlzr_dist)
@@ -15,8 +19,8 @@ from PySide6.QtWidgets import (QApplication, QMainWindow,
                                QLineEdit, QLabel, 
                                QFrame, QTabWidget, 
                                QMessageBox, QFileDialog, 
-                               QCheckBox, QProgressBar,
-                               )
+                               QCheckBox, QProgressBar)
+
 
 def resolver_ruta(ruta_relativa):
     if hasattr(sys, "_MEIPASS"):
@@ -1082,6 +1086,23 @@ if __name__ == "__main__":
     
     app = QApplication.instance()
     if app is None: app = QApplication(sys.argv)
+    
+    JBM = resolver_ruta(
+    os.path.join("Fuentes", "JetBrainsMono-Regular.ttf")
+    )
+    
+    JBM_B = resolver_ruta(
+    os.path.join("Fuentes", "JetBrainsMono-Bold.ttf")
+    )
+    
+    BA = resolver_ruta(
+    os.path.join("Fuentes", "BrunoAce-Regular.ttf")
+    )
+    
+    id_JBM = QFontDatabase.addApplicationFont(JBM)
+    id_JBM_B = QFontDatabase.addApplicationFont(JBM_B)
+    id_BA = QFontDatabase.addApplicationFont(BA)
+    
     if sys.platform == "darwin":
         nombre_icono = "icon.icns"
     else:
