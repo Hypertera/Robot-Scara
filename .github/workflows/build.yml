@@ -4,101 +4,81 @@ name: Build ControlSCARA
 on:
   push:
     tags:
-      - "v*"
+      - "control-v*"
 
 permissions:
   contents: write
 
 jobs:
-
   build:
-
     strategy:
       fail-fast: false
-
       matrix:
         include:
           - os: windows-latest
             name: Windows
-            python: "3.11"
-
           - os: macos-latest
             name: macOS
-            python: "3.11"
-
           - os: ubuntu-22.04
             name: Linux
-            python: "3.11"
 
     runs-on: ${{ matrix.os }}
 
     steps:
-
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python }}
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Build application
+      - name: Build ControlSCARA
         run: |
           pyinstaller ControlSCARA.spec --clean
 
-      # Windows
       - name: Package Windows
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          Compress-Archive `
-            -Path dist/ControlSCARA/* `
-            -DestinationPath ControlSCARA-Windows.zip
+          Compress-Archive -Path dist/ControlSCARA/* -DestinationPath ControlSCARA-Windows.zip
 
-      # macOS
       - name: Package macOS
         if: runner.os == 'macOS'
         run: |
-          ditto -c -k --sequesterRsrc --keepParent \
-            dist/ControlSCARA.app \
-            ControlSCARA-macOS.zip
+          ditto -c -k --sequesterRsrc --keepParent dist/ControlSCARA.app ControlSCARA-macOS.zip
 
-      # Linux
       - name: Package Linux
         if: runner.os == 'Linux'
         run: |
           cd dist
           zip -r ../ControlSCARA-Linux.zip ControlSCARA
 
-      # Guardar los ejecutables
-      - name: Upload build artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ControlSCARA-${{ matrix.name }}
           path: ControlSCARA-${{ matrix.name }}.zip
           if-no-files-found: error
 
-  # Publicar Release
   release:
-
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-
-      - name: Download all builds
+      - name: Download builds
         uses: actions/download-artifact@v4
         with:
           path: release-assets
           pattern: ControlSCARA-*
           merge-multiple: true
 
-      - name: Publish GitHub Release
+      - name: Publish Release
         uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true
