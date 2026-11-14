@@ -1,4 +1,4 @@
-name: Build Simulador SCARA v1
+name: Build Control SCARA v1
 
 on:
   workflow_dispatch:
@@ -24,23 +24,23 @@ jobs:
 
           - name: Windows x64
             os: windows-latest
-            artifact_name: Simulador_SCARA_Windows_x64
-            archive_name: Simulador_SCARA_Windows_x64.zip
+            artifact_name:  Control_SCARA_Windows_x64
+            archive_name:  Control_SCARA_Windows_x64.zip
 
           - name: Linux x64
             os: ubuntu-latest
-            artifact_name: Simulador_SCARA_Linux_x64
-            archive_name: Simulador_SCARA_Linux_x64.tar.gz
+            artifact_name:  Control_SCARA_Linux_x64
+            archive_name:  Control_SCARA_Linux_x64.tar.gz
 
           - name: macOS Intel
             os: macos-15-intel
-            artifact_name: Simulador_SCARA_macOS_Intel
-            archive_name: Simulador_SCARA_macOS_Intel.zip
+            artifact_name:  Control_SCARA_macOS_Intel
+            archive_name:  Control_SCARA_macOS_Intel.zip
 
           - name: macOS ARM64
             os: macos-15
-            artifact_name: Simulador_SCARA_macOS_ARM64
-            archive_name: Simulador_SCARA_macOS_ARM64.zip
+            artifact_name: Control_SCARA_macOS_ARM64
+            archive_name:  Control_SCARA_macOS_ARM64.zip
 
     steps:
 
@@ -60,7 +60,7 @@ jobs:
 
       - name: Build application
         run: |
-          pyinstaller --clean --noconfirm Simulador_SCARA.spec
+          pyinstaller ControlSCARA.spec --clean
 
       - name: Inspect build output
         shell: bash
@@ -75,7 +75,7 @@ jobs:
         shell: pwsh
         run: |
           Compress-Archive `
-            -Path "dist/Simulador_SCARA_by_Hypertera" `
+            -Path "dist/Control_SCARA_by_Hypertera" `
             -DestinationPath "${{ matrix.archive_name }}"
 
       - name: Create macOS archive
@@ -83,7 +83,7 @@ jobs:
         run: |
           cd dist
           zip -r "../${{ matrix.archive_name }}" \
-            "Simulador_SCARA_by_Hypertera.app"
+            "Control_SCARA_by_Hypertera.app"
 
       - name: Create Linux archive
         if: runner.os == 'Linux'
@@ -91,7 +91,7 @@ jobs:
           tar -czf \
             "${{ matrix.archive_name }}" \
             -C dist \
-            "Simulador_SCARA_by_Hypertera"
+            "Control_SCARA_by_Hypertera"
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v6
@@ -114,13 +114,3 @@ jobs:
         with:
           path: release-assets
           merge-multiple: true
-
-      - name: Create GitHub Release
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh release create "${{ github.ref_name }}" \
-            release-assets/* \
-            --repo "${{ github.repository }}" \
-            --title "Simulador SCARA ${{ github.ref_name }}" \
-            --generate-notes
