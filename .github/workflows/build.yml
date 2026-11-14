@@ -1,8 +1,7 @@
-name: Build Control SCARA v1
+
+name: Build ControlSCARA
 
 on:
-  workflow_dispatch:
-
   push:
     tags:
       - "v*"
@@ -13,104 +12,94 @@ permissions:
 jobs:
 
   build:
-    name: Build ${{ matrix.name }}
-    runs-on: ${{ matrix.os }}
 
     strategy:
       fail-fast: false
 
       matrix:
         include:
+          - os: windows-latest
+            name: Windows
+            python: "3.11"
 
-          - name: Windows x64
-            os: windows-latest
-            artifact_name:  Control_SCARA_Windows_x64
-            archive_name:  Control_SCARA_Windows_x64.zip
+          - os: macos-latest
+            name: macOS
+            python: "3.11"
 
-          - name: Linux x64
-            os: ubuntu-latest
-            artifact_name:  Control_SCARA_Linux_x64
-            archive_name:  Control_SCARA_Linux_x64.tar.gz
+          - os: ubuntu-22.04
+            name: Linux
+            python: "3.11"
 
-          - name: macOS Intel
-            os: macos-15-intel
-            artifact_name:  Control_SCARA_macOS_Intel
-            archive_name:  Control_SCARA_macOS_Intel.zip
-
-          - name: macOS ARM64
-            os: macos-15
-            artifact_name: Control_SCARA_macOS_ARM64
-            archive_name:  Control_SCARA_macOS_ARM64.zip
+    runs-on: ${{ matrix.os }}
 
     steps:
 
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v6
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: ${{ matrix.python }}
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pyinstaller==6.22.3
 
       - name: Build application
         run: |
           pyinstaller ControlSCARA.spec --clean
 
-      - name: Inspect build output
-        shell: bash
-        run: |
-          echo "===== DIST ====="
-          find dist -maxdepth 4 -print
-          echo "===== BUILD ====="
-          find build -maxdepth 3 -print
-
-      - name: Create Windows archive
+      # Windows
+      - name: Package Windows
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
           Compress-Archive `
-            -Path "dist/Control_SCARA_by_Hypertera" `
-            -DestinationPath "${{ matrix.archive_name }}"
+            -Path dist/ControlSCARA/* `
+            -DestinationPath ControlSCARA-Windows.zip
 
-      - name: Create macOS archive
+      # macOS
+      - name: Package macOS
         if: runner.os == 'macOS'
         run: |
-          cd dist
-          zip -r "../${{ matrix.archive_name }}" \
-            "Control_SCARA_by_Hypertera.app"
+          ditto -c -k --sequesterRsrc --keepParent \
+            dist/ControlSCARA.app \
+            ControlSCARA-macOS.zip
 
-      - name: Create Linux archive
+      # Linux
+      - name: Package Linux
         if: runner.os == 'Linux'
         run: |
-          tar -czf \
-            "${{ matrix.archive_name }}" \
-            -C dist \
-            "Control_SCARA_by_Hypertera"
+          cd dist
+          zip -r ../ControlSCARA-Linux.zip ControlSCARA
 
+      # Guardar los ejecutables
       - name: Upload build artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.artifact_name }}
-          path: ${{ matrix.archive_name }}
+          name: ControlSCARA-${{ matrix.name }}
+          path: ControlSCARA-${{ matrix.name }}.zip
+          if-no-files-found: error
 
+  # Publicar Release
   release:
-    name: Create GitHub Release
+
     needs: build
-
-    if: startsWith(github.ref, 'refs/tags/')
-
     runs-on: ubuntu-latest
 
     steps:
 
-      - name: Download all build artifacts
-        uses: actions/download-artifact@v6
+      - name: Download all builds
+        uses: actions/download-artifact@v4
         with:
           path: release-assets
+          pattern: ControlSCARA-*
           merge-multiple: true
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: release-assets/*.zip
