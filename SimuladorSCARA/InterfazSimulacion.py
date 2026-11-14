@@ -705,6 +705,7 @@ class InterfazScara(QMainWindow):
             pts = P @ M @ T
             xy[:, i] = pts
             i += 1
+        print(i)
         return xy.T
 
     def agregar_punto(self):
