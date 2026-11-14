@@ -1,7 +1,9 @@
 
-name: Build ControlSCARA
+name: Build ControlSCARA v1
 
 on:
+  workflow_dispatch:
+
   push:
     tags:
       - "control-v*"
@@ -10,26 +12,44 @@ permissions:
   contents: write
 
 jobs:
-  build:
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: windows-latest
-            name: Windows
-          - os: macos-latest
-            name: macOS
-          - os: ubuntu-22.04
-            name: Linux
 
+  build:
+    name: Build ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    strategy:
+      fail-fast: false
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      matrix:
+        include:
+
+          - name: Windows x64
+            os: windows-latest
+            artifact_name: ControlSCARA_Windows_x64
+            archive_name: ControlSCARA_Windows_x64.zip
+
+          - name: Linux x64
+            os: ubuntu-latest
+            artifact_name: ControlSCARA_Linux_x64
+            archive_name: ControlSCARA_Linux_x64.tar.gz
+
+          - name: macOS Intel
+            os: macos-15-intel
+            artifact_name: ControlSCARA_macOS_Intel
+            archive_name: ControlSCARA_macOS_Intel.zip
+
+          - name: macOS ARM64
+            os: macos-15
+            artifact_name: ControlSCARA_macOS_ARM64
+            archive_name: ControlSCARA_macOS_ARM64.zip
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
@@ -37,49 +57,68 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install pyinstaller==6.22.3
 
-      - name: Build ControlSCARA
+      - name: Build application
         run: |
           pyinstaller ControlSCARA.spec --clean
 
-      - name: Package Windows
+      - name: Inspect build output
+        shell: bash
+        run: |
+          echo "===== DIST ====="
+          find dist -maxdepth 4 -print
+          echo "===== BUILD ====="
+          find build -maxdepth 3 -print
+
+      - name: Create Windows archive
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          Compress-Archive -Path dist/ControlSCARA/* -DestinationPath ControlSCARA-Windows.zip
+          Compress-Archive `
+            -Path "dist/ControlSCARA" `
+            -DestinationPath "${{ matrix.archive_name }}"
 
-      - name: Package macOS
+      - name: Create macOS archive
         if: runner.os == 'macOS'
         run: |
-          ditto -c -k --sequesterRsrc --keepParent dist/ControlSCARA.app ControlSCARA-macOS.zip
+          cd dist
+          zip -r "../${{ matrix.archive_name }}" \
+            "ControlSCARA.app"
 
-      - name: Package Linux
+      - name: Create Linux archive
         if: runner.os == 'Linux'
         run: |
-          cd dist
-          zip -r ../ControlSCARA-Linux.zip ControlSCARA
+          tar -czf \
+            "${{ matrix.archive_name }}" \
+            -C dist \
+            "ControlSCARA"
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v6
         with:
-          name: ControlSCARA-${{ matrix.name }}
-          path: ControlSCARA-${{ matrix.name }}.zip
+          name: ${{ matrix.artifact_name }}
+          path: ${{ matrix.archive_name }}
           if-no-files-found: error
 
   release:
+    name: Create GitHub Release
     needs: build
+
+    if: startsWith(github.ref, 'refs/tags/')
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download builds
-        uses: actions/download-artifact@v4
+
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v6
         with:
           path: release-assets
-          pattern: ControlSCARA-*
           merge-multiple: true
 
-      - name: Publish Release
+      - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true
-          files: release-assets/*.zip
+          files: release-assets/*
