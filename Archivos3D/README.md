@@ -12,8 +12,7 @@ Asegúrate de tener calibrada tu impresora usando "Compensación de huecos" y "C
    * 8 mm x8
 
 - Insertos M3
-   * 8x4.5 mm
-   * 3x4.5 mm
+   * 3x4.5 mm x16
    * 5x4.5 mm ó 6x4.5 mm x10
    * 8x4.5 mm x3
 
@@ -47,6 +46,6 @@ Todavía no se encuentra disponible la guía de ensamblaje del Robot, les ruego 
 
 Imagen de referencia. Espero que sea de ayuda por el momento.
 
-<img width="211" height="319" alt="image" src="https://github.com/user-attachments/assets/93886603-7b6e-4176-8eeb-edf9ed05559e" />
+<img width="896" height="1200" alt="image_64917999" src="https://github.com/user-attachments/assets/b7b5a913-8018-401a-af7e-172d79bb9ee3" />
 
 La guía se encontrará disponible en mi canal de YouTube @Hypertera.
