@@ -43,10 +43,10 @@ Asegúrate de tener calibrada tu impresora usando "Compensación de huecos" y "C
 # ACTUALIZACION 14/NOV/2026
 
 El proyecto no esta 100% completo pero ya es funcional.
-Todavía no se encuentra disponible la guía de ensamblaje del Robot, les ruego por su paciencias, soy yo solo a cargo de este Proyecto.
+Todavía no se encuentra disponible la guía de ensamblaje del Robot, les ruego por su paciencia, soy yo solo a cargo de este Proyecto.
 
 Imagen de referencia. Espero que sea de ayuda por el momento.
 
 <img width="211" height="319" alt="image" src="https://github.com/user-attachments/assets/93886603-7b6e-4176-8eeb-edf9ed05559e" />
 
-La guía se encontrara disponible en mi canal de YouTube @Hypertera.
+La guía se encontrará disponible en mi canal de YouTube @Hypertera.
