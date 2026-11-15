@@ -37,3 +37,6 @@ A continuación se mostrará como conectar y configurar los motores y los sensor
 - MT3: Motor Z
 - MT4: Motor A
 
+## ACTUALIZACIÓN 15/NOV/2026
+
+Actualmente, la App solo puede controlar tres de los cuatro motores que se mostraron en el diagrama anterior.
