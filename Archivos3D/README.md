@@ -28,13 +28,13 @@ Asegúrate de tener calibrada tu impresora usando "Compensación de huecos" y "C
    * 3x3 mm x12
  
 - Tornillo de Avance
-   * 8 mm avance/revolución
+   * 8 mm avance/revolución x1
  
 - Varillas guia
    * M8 x3
 
 - Rodamiento lineal M8
-   * 16x24 mm
+   * 16x24 mm x3
 
 - Rodamientos
    * 80x100x10 mm x1
