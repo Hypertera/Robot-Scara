@@ -48,4 +48,8 @@ Imagen de referencia. Espero que sea de ayuda por el momento.
 
 <img width="896" height="1200" alt="image_64917999" src="https://github.com/user-attachments/assets/b7b5a913-8018-401a-af7e-172d79bb9ee3" />
 
-La guía se encontrará disponible en mi canal de YouTube @Hypertera.
+La guía se encontrará disponible en mi canal de YouTube <a href="https://youtube.com/@hypertera?si=J44j011zCtAFcbqK" target="_blank">@Hypertera</a>
+
+
+
+
