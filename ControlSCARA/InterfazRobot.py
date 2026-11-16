@@ -1588,11 +1588,9 @@ class InterfazScara(QMainWindow):
         self.ejecutar_segmento()
         
     def ejecutar_segmento(self):
-        
         if self.idx_bloque_actual >= len(self.segmnts_agrpds):
             self.parar(1)
             if not self.seg_listo:
-                self.habilitar()
                 if self.conexion_exitosa and self.calibrado:
                     self.timerRobot.start(16)
             else:
@@ -1650,11 +1648,14 @@ class InterfazScara(QMainWindow):
             self.tab_controles.btn_parar.setEnabled(False)
             varbls.sen.arduino.reset_input_buffer()
             varbls.mot.arduino.reset_input_buffer()
+            
         QApplication.beep()
         if band == 1:
             self.tab_controles.barra_progreso.setValue(100) 
         else:
-            QMessageBox.information(self, "Aviso", "Simulación detenida")
+            if self.conexion_exitosa and self.calibrado:
+                QTimer.singleShot(900, self.terminar)
+            QMessageBox.information(self, "Aviso", "Seguimiento detenido")
     
     def terminar(self, band=0):
         if band == 0:
