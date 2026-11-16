@@ -16,12 +16,12 @@ A continuación se mostrará como conectar y configurar los motores y los sensor
 
 # CNC SHIELD 1600 PASOS/REVOLUCIÓN
 
-- 4 MicroStep
+- 8 MicroStep
 - 1.8° Motor
 
 ## Motores correspondientes a cada articulación
 
-- Motor x: A1
+- Motor X: A1
 - Motor Y: A2
 - Motor Z: A3
 - Motor A: A4
@@ -39,4 +39,4 @@ A continuación se mostrará como conectar y configurar los motores y los sensor
 
 ## ACTUALIZACIÓN 15/NOV/2026
 
-Actualmente, la App solo puede controlar tres de los cuatro motores que se mostraron en el diagrama anterior.
+Actualmente, la App "ControlSCARA" solo puede controlar tres de los cuatro motores que se mostraron en el diagrama anterior.
